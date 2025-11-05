@@ -20,8 +20,11 @@ Este proyecto sirve como base de referencia para implementar testing en aplicaci
 - **JUnit 5 (Jupiter)**: Framework de testing moderno con soporte para tests parametrizados, dinámicos y nested
 - **Mockito**: Framework de mocking para tests unitarios
 - **AssertJ**: Librería de assertions expresivas y fluidas
+- **Selenium WebDriver**: Automatización de navegadores web para tests E2E
+- **Page Object Model (POM)**: Patrón de diseño para tests web mantenibles
 - **Principios SOLID**: Aplicados en el diseño de clases
 - **Buenas prácticas**: Nomenclatura, organización y patrones de testing
+- **Reportes HTML**: Generación automática de reportes visuales de tests
 
 ## Tecnologías
 
@@ -32,6 +35,8 @@ Este proyecto sirve como base de referencia para implementar testing en aplicaci
 | JUnit 5 | 5.10.1 | Framework de testing |
 | Mockito | 5.8.0 | Framework de mocking |
 | AssertJ | 3.24.2 | Assertions expresivas |
+| Selenium WebDriver | 4.16.1 | Automatización de navegadores |
+| WebDriverManager | 5.6.2 | Gestión automática de drivers |
 
 ## Principios SOLID Aplicados
 
@@ -92,9 +97,22 @@ src/
     │   └── UserServiceMockTest.java
     ├── integration/     # Tests de integración
     │   └── UserServiceIntegrationTest.java
-    └── parameterized/   # Tests parametrizados
-        ├── ParameterizedEmailValidationTest.java
-        └── DynamicTestsExample.java
+    ├── parameterized/   # Tests parametrizados
+    │   ├── ParameterizedEmailValidationTest.java
+    │   └── DynamicTestsExample.java
+    └── web/             # Tests de automatización web
+        ├── WebAutomationTest.java
+        ├── pages/       # Page Objects (POM)
+        │   ├── InternetHomePage.java
+        │   ├── LoginPage.java
+        │   ├── SecureAreaPage.java
+        │   ├── CheckboxesPage.java
+        │   ├── DropdownPage.java
+        │   └── AddRemoveElementsPage.java
+        └── utils/       # Utilidades web
+            ├── BasePage.java
+            ├── WebDriverFactory.java
+            └── TestReportGenerator.java
 ```
 
 ## Tipos de Tests
@@ -213,6 +231,53 @@ Collection<DynamicTest> dynamicTests() {
         .toList();
 }
 ```
+
+### 6. Tests de Automatización Web (Selenium)
+
+Tests que automatizan navegadores web para validar funcionalidad E2E (End-to-End).
+
+**Ejemplo**: `WebAutomationTest.java`
+```java
+@Test
+@DisplayName("Login exitoso con credenciales válidas")
+void shouldLoginSuccessfully() {
+    // Given
+    homePage.open();
+    LoginPage loginPage = homePage.goToLoginPage();
+
+    // When
+    SecureAreaPage secureArea = loginPage.login("tomsmith", "SuperSecretPassword!");
+
+    // Then
+    assertTrue(secureArea.isLoginSuccessful());
+    assertTrue(secureArea.isLogoutButtonVisible());
+}
+```
+
+**Características**:
+- Usa **Selenium WebDriver** para controlar navegadores reales
+- Aplica el patrón **Page Object Model (POM)** para código mantenible
+- Genera **reportes HTML** automáticamente con resultados visuales
+- Soporta **Chrome** y **Firefox** (modo normal y headless)
+- WebDriverManager gestiona drivers automáticamente
+
+**Tests implementados**:
+- ✅ Navegación y carga de páginas
+- ✅ Login exitoso y fallido
+- ✅ Interacción con checkboxes
+- ✅ Selección de dropdowns
+- ✅ Agregar/remover elementos dinámicamente
+- ✅ Flujos completos de navegación
+
+**Page Objects creados**:
+- `InternetHomePage`: Página principal
+- `LoginPage`: Formulario de login
+- `SecureAreaPage`: Área segura post-login
+- `CheckboxesPage`: Interacción con checkboxes
+- `DropdownPage`: Selección de dropdowns
+- `AddRemoveElementsPage`: Elementos dinámicos
+
+**Sitio web de prueba**: [https://the-internet.herokuapp.com/](https://the-internet.herokuapp.com/)
 
 ## Buenas Prácticas de Testing
 
@@ -359,6 +424,35 @@ mvn clean test
 # Los reportes se generan en target/surefire-reports/
 ```
 
+### Ejecutar solo tests web
+
+```bash
+# Ejecutar tests de automatización web
+mvn test -Dtest=WebAutomationTest
+
+# El reporte HTML se genera automáticamente en:
+# target/test-reports/web-automation-report.html
+```
+
+### Ver reporte HTML de tests web
+
+Después de ejecutar los tests web, abre el reporte generado:
+
+```bash
+# En Linux/Mac
+open target/test-reports/web-automation-report.html
+
+# En Windows
+start target/test-reports/web-automation-report.html
+```
+
+El reporte incluye:
+- 📊 Resumen ejecutivo con estadísticas
+- ✅ Lista detallada de tests ejecutados
+- 🎨 Interfaz visual con colores
+- 📈 Tasa de éxito/fallo
+- ⏱️ Tiempos de ejecución
+
 ## Patrones de Testing Implementados
 
 ### 1. Test Doubles
@@ -387,12 +481,60 @@ verify(repository).save(userCaptor.capture());
 assertEquals("test@example.com", userCaptor.getValue().getEmail());
 ```
 
+### 4. Page Object Model (POM)
+
+Patrón de diseño para tests web que encapsula elementos y acciones de página:
+
+**Beneficios**:
+- ✅ Código más mantenible y reutilizable
+- ✅ Reduce duplicación de código
+- ✅ Cambios en UI requieren actualizar solo el Page Object
+- ✅ Tests más legibles y expresivos
+
+**Estructura**:
+```java
+// BasePage - Clase base con métodos comunes
+public abstract class BasePage {
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+
+    protected void click(By locator) { /* ... */ }
+    protected void type(By locator, String text) { /* ... */ }
+}
+
+// LoginPage - Page Object específico
+public class LoginPage extends BasePage {
+    private final By usernameField = By.id("username");
+
+    public SecureAreaPage login(String username, String password) {
+        type(usernameField, username);
+        // ...
+        return new SecureAreaPage(driver);
+    }
+}
+```
+
+**WebDriverFactory** - Factory Pattern para crear drivers:
+```java
+WebDriver driver = WebDriverFactory.createDriver(BrowserType.CHROME_HEADLESS);
+```
+
 ## Recursos Adicionales
 
+### Testing Frameworks
 - [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
 - [Mockito Documentation](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html)
 - [AssertJ Documentation](https://assertj.github.io/doc/)
+
+### Web Automation
+- [Selenium WebDriver Documentation](https://www.selenium.dev/documentation/webdriver/)
+- [WebDriverManager](https://github.com/bonigarcia/webdrivermanager)
+- [The Internet - Test Site](https://the-internet.herokuapp.com/)
+- [Page Object Model Pattern](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)
+
+### Design Principles
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+- [Testing Best Practices](https://martinfowler.com/testing/)
 
 ## Contribuir
 
