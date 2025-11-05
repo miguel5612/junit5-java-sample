@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +46,7 @@ class DynamicTestsExample {
                     assertTrue(validator.isValid(user), "Email " + email + " should be valid");
                 }
             ))
-            .toList();
+            .collect(Collectors.toList());
     }
 
     @TestFactory
@@ -77,7 +78,17 @@ class DynamicTestsExample {
     @DisplayName("Dynamically generate user validation tests with multiple scenarios")
     Collection<DynamicTest> dynamicUserValidationTests() {
         // Given - diferentes escenarios de usuarios
-        record TestScenario(String description, User user, boolean shouldBeValid) {}
+        class TestScenario {
+            final String description;
+            final User user;
+            final boolean shouldBeValid;
+
+            TestScenario(String description, User user, boolean shouldBeValid) {
+                this.description = description;
+                this.user = user;
+                this.shouldBeValid = shouldBeValid;
+            }
+        }
 
         List<TestScenario> scenarios = Arrays.asList(
             new TestScenario(
@@ -123,14 +134,22 @@ class DynamicTestsExample {
                         .isEqualTo(scenario.shouldBeValid);
                 }
             ))
-            .toList();
+            .collect(Collectors.toList());
     }
 
     @TestFactory
     @DisplayName("Dynamically generate tests for special characters in emails")
     Stream<DynamicTest> dynamicSpecialCharactersInEmails() {
         // Given - emails con caracteres especiales
-        record EmailTest(String email, boolean shouldBeValid) {}
+        class EmailTest {
+            final String email;
+            final boolean shouldBeValid;
+
+            EmailTest(String email, boolean shouldBeValid) {
+                this.email = email;
+                this.shouldBeValid = shouldBeValid;
+            }
+        }
 
         List<EmailTest> emailTests = Arrays.asList(
             new EmailTest("user+tag@example.com", true),

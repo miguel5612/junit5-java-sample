@@ -172,183 +172,182 @@ public class TestReportGenerator {
      * Obtiene la hoja de estilos CSS para el reporte.
      */
     private String getStyleSheet() {
-        return """
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+        StringBuilder css = new StringBuilder();
+        css.append("* {\n");
+        css.append("    margin: 0;\n");
+        css.append("    padding: 0;\n");
+        css.append("    box-sizing: border-box;\n");
+        css.append("}\n\n");
 
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                padding: 20px;
-                min-height: 100vh;
-            }
+        css.append("body {\n");
+        css.append("    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n");
+        css.append("    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n");
+        css.append("    padding: 20px;\n");
+        css.append("    min-height: 100vh;\n");
+        css.append("}\n\n");
 
-            .header {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-                text-align: center;
-            }
+        css.append(".header {\n");
+        css.append("    background: white;\n");
+        css.append("    padding: 30px;\n");
+        css.append("    border-radius: 10px;\n");
+        css.append("    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n");
+        css.append("    margin-bottom: 20px;\n");
+        css.append("    text-align: center;\n");
+        css.append("}\n\n");
 
-            .header h1 {
-                color: #2d3748;
-                font-size: 2.5em;
-                margin-bottom: 10px;
-            }
+        css.append(".header h1 {\n");
+        css.append("    color: #2d3748;\n");
+        css.append("    font-size: 2.5em;\n");
+        css.append("    margin-bottom: 10px;\n");
+        css.append("}\n\n");
 
-            .subtitle {
-                color: #718096;
-                font-size: 1.2em;
-            }
+        css.append(".subtitle {\n");
+        css.append("    color: #718096;\n");
+        css.append("    font-size: 1.2em;\n");
+        css.append("}\n\n");
 
-            .summary {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-            }
+        css.append(".summary {\n");
+        css.append("    background: white;\n");
+        css.append("    padding: 30px;\n");
+        css.append("    border-radius: 10px;\n");
+        css.append("    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n");
+        css.append("    margin-bottom: 20px;\n");
+        css.append("}\n\n");
 
-            .summary h2 {
-                color: #2d3748;
-                margin-bottom: 20px;
-                font-size: 1.8em;
-            }
+        css.append(".summary h2 {\n");
+        css.append("    color: #2d3748;\n");
+        css.append("    margin-bottom: 20px;\n");
+        css.append("    font-size: 1.8em;\n");
+        css.append("}\n\n");
 
-            .summary-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-            }
+        css.append(".summary-grid {\n");
+        css.append("    display: grid;\n");
+        css.append("    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n");
+        css.append("    gap: 20px;\n");
+        css.append("}\n\n");
 
-            .summary-item {
-                background: #f7fafc;
-                padding: 20px;
-                border-radius: 8px;
-                border-left: 4px solid #667eea;
-            }
+        css.append(".summary-item {\n");
+        css.append("    background: #f7fafc;\n");
+        css.append("    padding: 20px;\n");
+        css.append("    border-radius: 8px;\n");
+        css.append("    border-left: 4px solid #667eea;\n");
+        css.append("}\n\n");
 
-            .summary-item .label {
-                display: block;
-                color: #718096;
-                font-size: 0.9em;
-                margin-bottom: 8px;
-            }
+        css.append(".summary-item .label {\n");
+        css.append("    display: block;\n");
+        css.append("    color: #718096;\n");
+        css.append("    font-size: 0.9em;\n");
+        css.append("    margin-bottom: 8px;\n");
+        css.append("}\n\n");
 
-            .summary-item .value {
-                display: block;
-                color: #2d3748;
-                font-size: 1.8em;
-                font-weight: bold;
-            }
+        css.append(".summary-item .value {\n");
+        css.append("    display: block;\n");
+        css.append("    color: #2d3748;\n");
+        css.append("    font-size: 1.8em;\n");
+        css.append("    font-weight: bold;\n");
+        css.append("}\n\n");
 
-            .summary-item .value.passed {
-                color: #38a169;
-            }
+        css.append(".summary-item .value.passed {\n");
+        css.append("    color: #38a169;\n");
+        css.append("}\n\n");
 
-            .summary-item .value.failed {
-                color: #e53e3e;
-            }
+        css.append(".summary-item .value.failed {\n");
+        css.append("    color: #e53e3e;\n");
+        css.append("}\n\n");
 
-            .results {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-            }
+        css.append(".results {\n");
+        css.append("    background: white;\n");
+        css.append("    padding: 30px;\n");
+        css.append("    border-radius: 10px;\n");
+        css.append("    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n");
+        css.append("    margin-bottom: 20px;\n");
+        css.append("}\n\n");
 
-            .results h2 {
-                color: #2d3748;
-                margin-bottom: 20px;
-                font-size: 1.8em;
-            }
+        css.append(".results h2 {\n");
+        css.append("    color: #2d3748;\n");
+        css.append("    margin-bottom: 20px;\n");
+        css.append("    font-size: 1.8em;\n");
+        css.append("}\n\n");
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
+        css.append("table {\n");
+        css.append("    width: 100%;\n");
+        css.append("    border-collapse: collapse;\n");
+        css.append("}\n\n");
 
-            thead {
-                background: #667eea;
-                color: white;
-            }
+        css.append("thead {\n");
+        css.append("    background: #667eea;\n");
+        css.append("    color: white;\n");
+        css.append("}\n\n");
 
-            th, td {
-                padding: 15px;
-                text-align: left;
-                border-bottom: 1px solid #e2e8f0;
-            }
+        css.append("th, td {\n");
+        css.append("    padding: 15px;\n");
+        css.append("    text-align: left;\n");
+        css.append("    border-bottom: 1px solid #e2e8f0;\n");
+        css.append("}\n\n");
 
-            th {
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.85em;
-                letter-spacing: 0.5px;
-            }
+        css.append("th {\n");
+        css.append("    font-weight: 600;\n");
+        css.append("    text-transform: uppercase;\n");
+        css.append("    font-size: 0.85em;\n");
+        css.append("    letter-spacing: 0.5px;\n");
+        css.append("}\n\n");
 
-            tbody tr:hover {
-                background: #f7fafc;
-            }
+        css.append("tbody tr:hover {\n");
+        css.append("    background: #f7fafc;\n");
+        css.append("}\n\n");
 
-            .test-name {
-                font-weight: 500;
-                color: #2d3748;
-            }
+        css.append(".test-name {\n");
+        css.append("    font-weight: 500;\n");
+        css.append("    color: #2d3748;\n");
+        css.append("}\n\n");
 
-            .status {
-                font-weight: bold;
-            }
+        css.append(".status {\n");
+        css.append("    font-weight: bold;\n");
+        css.append("}\n\n");
 
-            .status.passed {
-                color: #38a169;
-            }
+        css.append(".status.passed {\n");
+        css.append("    color: #38a169;\n");
+        css.append("}\n\n");
 
-            .status.failed {
-                color: #e53e3e;
-            }
+        css.append(".status.failed {\n");
+        css.append("    color: #e53e3e;\n");
+        css.append("}\n\n");
 
-            .details {
-                color: #718096;
-                font-size: 0.9em;
-                max-width: 400px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
+        css.append(".details {\n");
+        css.append("    color: #718096;\n");
+        css.append("    font-size: 0.9em;\n");
+        css.append("    max-width: 400px;\n");
+        css.append("    overflow: hidden;\n");
+        css.append("    text-overflow: ellipsis;\n");
+        css.append("    white-space: nowrap;\n");
+        css.append("}\n\n");
 
-            .footer {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                text-align: center;
-                color: #718096;
-            }
+        css.append(".footer {\n");
+        css.append("    background: white;\n");
+        css.append("    padding: 20px;\n");
+        css.append("    border-radius: 10px;\n");
+        css.append("    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n");
+        css.append("    text-align: center;\n");
+        css.append("    color: #718096;\n");
+        css.append("}\n\n");
 
-            .footer p {
-                margin: 5px 0;
-            }
+        css.append(".footer p {\n");
+        css.append("    margin: 5px 0;\n");
+        css.append("}\n\n");
 
-            @media (max-width: 768px) {
-                .summary-grid {
-                    grid-template-columns: 1fr;
-                }
+        css.append("@media (max-width: 768px) {\n");
+        css.append("    .summary-grid {\n");
+        css.append("        grid-template-columns: 1fr;\n");
+        css.append("    }\n");
+        css.append("    table {\n");
+        css.append("        font-size: 0.9em;\n");
+        css.append("    }\n");
+        css.append("    th, td {\n");
+        css.append("        padding: 10px;\n");
+        css.append("    }\n");
+        css.append("}\n");
 
-                table {
-                    font-size: 0.9em;
-                }
-
-                th, td {
-                    padding: 10px;
-                }
-            }
-        """;
+        return css.toString();
     }
 
     /**
